@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             title: 'Thrivve',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              useMaterial3: false,
+              useMaterial3: true,
               dialogTheme:
                   const DialogTheme(backgroundColor: ThemeColors.white),
               primarySwatch: Colors.red,

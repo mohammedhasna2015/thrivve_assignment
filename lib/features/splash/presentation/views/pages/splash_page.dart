@@ -5,9 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:thrivve_assignment/core/themes/colors.dart';
 import 'package:thrivve_assignment/core/themes/images.dart';
-import 'package:thrivve_assignment/core/utils/static_var.dart';
-import 'package:thrivve_assignment/core/utils/storage.dart';
-import 'package:thrivve_assignment/di.dart';
+import 'package:thrivve_assignment/core/utils/navigation_service.dart';
+import 'package:thrivve_assignment/features/withdraw/presentation/views/pages/withdraw_page.dart';
 
 class SplashPage extends StatefulWidget {
   static const routeName = '/';
@@ -28,7 +27,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ThemeColors.color1A5798,
+      backgroundColor: ThemeColors.white,
       body: _body(),
     );
   }
@@ -40,7 +39,7 @@ class _SplashPageState extends State<SplashPage> {
         end: 50.sp,
       ),
       alignment: Alignment.center,
-      child: SvgPicture.asset(
+      child: SvgPicture.network(
         Images.splashIcon,
       ),
     );
@@ -48,10 +47,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void _checkAndNavigate() {
     Timer(Duration(seconds: 2), () {
-      final accessToken = getIt<Storage>().accessToken;
-      if (accessToken.isNotEmpty) {
-        StaticVar.accessToken = accessToken;
-      } else {}
+      NavigationService.instance.navigateToAndRemove(WithdrawPage.routeName);
     });
   }
 }

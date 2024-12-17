@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:thrivve_assignment/core/helper/page_loading_dialog/page_loading_dialog.dart';
+import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/i_show_snack_bar_helper.dart';
+import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/show_snack_bar_input.dart';
 import 'package:thrivve_assignment/core/utils/api_exception.dart';
-import 'package:thrivve_assignment/core/utils/snackbars_widget.dart';
-import 'package:thrivve_assignment/core/utils/static_var.dart';
 import 'package:thrivve_assignment/di.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/use_cases/list_payment_use_case.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/use_cases/withdraw_confrim_use_case.dart';
@@ -12,7 +12,11 @@ import 'package:thrivve_assignment/features/withdraw/domain/use_cases/withdraw_c
 class WithdrawProvider extends ChangeNotifier {
   final IGetWithDrawUseCase _getWithDrawUseCase;
   final IGetPaymentListUseCase _getPaymentListUseCase;
+  final IPageLoadingDialog iPageLoadingDialog;
+  final IShowSnackBarHelper showSnackBarHelper;
   WithdrawProvider(
+    this.showSnackBarHelper,
+    this.iPageLoadingDialog,
     this._getWithDrawUseCase,
     this._getPaymentListUseCase,
   );
@@ -25,8 +29,8 @@ class WithdrawProvider extends ChangeNotifier {
     } catch (error) {
       loader.hide();
       final apiError = ApiErrorHandler.handle(error);
-      SnackBars.danger(StaticVar.context, apiError.getDisplayMessage());
-
+      showSnackBarHelper
+          .showSnack(ShowSnackBarInput(message: apiError.getDisplayMessage()));
       log('An unexpected error occurred: ${apiError.technicalDetails.toString()}');
     }
   }
@@ -39,7 +43,8 @@ class WithdrawProvider extends ChangeNotifier {
     } catch (error) {
       loader.hide();
       final apiError = ApiErrorHandler.handle(error);
-      SnackBars.danger(StaticVar.context, apiError.getDisplayMessage());
+      showSnackBarHelper
+          .showSnack(ShowSnackBarInput(message: apiError.getDisplayMessage()));
 
       log('An unexpected error occurred: ${apiError.technicalDetails.toString()}');
     }

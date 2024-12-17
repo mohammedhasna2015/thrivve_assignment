@@ -5,6 +5,8 @@ import 'package:thrivve_assignment/core/helper/show_bottom_sheet/i_show_bottom_s
 import 'package:thrivve_assignment/core/helper/show_bottom_sheet/show_bottom_sheet_impl.dart';
 import 'package:thrivve_assignment/core/helper/show_dialog_helper/i_show_dialog_helper.dart';
 import 'package:thrivve_assignment/core/helper/show_dialog_helper/show_dialog_helper.dart';
+import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/i_show_snack_bar_helper.dart';
+import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/show_snack_bar_helper.dart';
 import 'package:thrivve_assignment/core/utils/navigation_service.dart';
 import 'package:thrivve_assignment/core/utils/storage.dart';
 import 'package:thrivve_assignment/features/withdraw/data/data_soruces/i_withdraw_datasource.dart';
@@ -34,6 +36,10 @@ Future<void> init() async {
   getIt.registerLazySingleton<IPageLoadingDialog>(
     () => PageLoadingDialog(),
   );
+  getIt.registerLazySingleton<IShowSnackBarHelper>(
+    () => ShowSnackBarHelperImpl(),
+  );
+
   _initWithDraw();
   getIt.registerSingleton<IShowBottomSheetHelper>(
     ShowBottomSheetHelperImpl(),
@@ -69,6 +75,8 @@ void _initWithDraw() {
 
   getIt.registerSingleton(
     WithdrawProvider(
+      getIt<IShowSnackBarHelper>(),
+      getIt<IPageLoadingDialog>(),
       getIt<IGetWithDrawUseCase>(),
       getIt<IGetPaymentListUseCase>(),
     ),

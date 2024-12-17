@@ -1,6 +1,5 @@
 import 'package:chopper/chopper.dart';
 import 'package:thrivve_assignment/core/utils/api_path.dart';
-import 'package:thrivve_assignment/core/utils/logger_service.dart';
 
 part 'withdraw_service.chopper.dart';
 
@@ -16,7 +15,8 @@ abstract class WithdrawService extends ChopperService {
         _$WithdrawService(),
       ],
       interceptors: [
-        HttpLoggingInterceptorCustom(),
+        CurlInterceptor(),
+        HttpLoggingInterceptor(),
       ],
       converter: JsonConverter(),
     );

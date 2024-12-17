@@ -3,12 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
   static const _isLogin = '_isLogin';
-  static const _deviceToken = '_deviceToken';
-  static const _userId = '_userId';
-  static const _accessToken = '_accessToken';
-  static const _emailUser = '_emailUser';
-  static const _phoneUser = '_phoneUser';
-  static const _nameUser = '_nameUser';
 
   final SharedPreferences _preferences;
   Storage(this._preferences);
@@ -42,25 +36,4 @@ class Storage {
   }
 
   /// ======================================= start ================
-
-  bool get isLogin => read<bool>(_isLogin) ?? false;
-  set isLogin(bool? newValue) => write(_isLogin, newValue);
-
-  String get deviceToken => read<String>(_deviceToken) ?? '';
-  set deviceToken(String? newValue) => write(_deviceToken, newValue);
-
-  String get accessToken => read<String>(_accessToken) ?? '';
-  set accessToken(String? newValue) => write(_accessToken, newValue);
-
-  String get userId => read<String>(_userId) ?? '';
-  set userId(String? newValue) => write(_userId, newValue);
-
-  String get nameUser => read<String>(_nameUser) ?? '';
-  set nameUser(String? newValue) => write(_nameUser, newValue);
-
-  String get phoneUser => read<String>(_phoneUser) ?? '';
-  set phoneUser(String? newValue) => write(_phoneUser, newValue);
-
-  String get emailUser => read<String>(_emailUser) ?? '';
-  set emailUser(String? newValue) => write(_emailUser, newValue);
 }
