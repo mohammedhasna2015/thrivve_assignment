@@ -3,10 +3,12 @@ import 'package:thrivve_assignment/core/utils/api_path.dart';
 
 part 'withdraw_service.chopper.dart';
 
-@ChopperApi(baseUrl: 'V3')
+@ChopperApi(baseUrl: '')
 abstract class WithdrawService extends ChopperService {
-  static const listPaymentPath = '40f5959f-e678-47b9-ae54-da3aac1c5f40';
-  static const withdrawConfirmPath = '705813b5-2b16-4a07-bb23-0d19425d5efe';
+  static const listPaymentPath =
+      'https://008915ae237e4a97a9f6f9344f43db74.api.mockbin.io';
+  static const withdrawConfirmPath =
+      'https://16b0271ef6904ad9bb4efc11937641fe.api.mockbin.io';
 
   static WithdrawService create() {
     final client = ChopperClient(

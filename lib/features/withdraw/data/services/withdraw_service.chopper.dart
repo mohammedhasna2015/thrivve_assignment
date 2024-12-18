@@ -19,7 +19,8 @@ final class _$WithdrawService extends WithdrawService {
 
   @override
   Future<Response<dynamic>> listPayment() {
-    final Uri $url = Uri.parse('V3/40f5959f-e678-47b9-ae54-da3aac1c5f40');
+    final Uri $url =
+        Uri.parse('https://008915ae237e4a97a9f6f9344f43db74.api.mockbin.io');
     final Request $request = Request(
       'GET',
       $url,
@@ -30,7 +31,8 @@ final class _$WithdrawService extends WithdrawService {
 
   @override
   Future<Response<dynamic>> confirmWithDraw() {
-    final Uri $url = Uri.parse('V3/705813b5-2b16-4a07-bb23-0d19425d5efe');
+    final Uri $url =
+        Uri.parse('https://16b0271ef6904ad9bb4efc11937641fe.api.mockbin.io');
     final Request $request = Request(
       'GET',
       $url,
