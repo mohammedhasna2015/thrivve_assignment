@@ -3,10 +3,10 @@ import 'package:thrivve_assignment/features/withdraw/data/models/payment_model.d
 import 'package:thrivve_assignment/features/withdraw/data/models/withdraw_confirm_model.dart';
 import 'package:thrivve_assignment/features/withdraw/data/services/withdraw_service.dart';
 
-class WithdrawDatawSource extends IWithdrawDataSource {
+class WithdrawDataSource extends IWithdrawDataSource {
   final WithdrawService _withdrawService;
 
-  WithdrawDatawSource(this._withdrawService);
+  WithdrawDataSource(this._withdrawService);
 
   @override
   Future<WithdrawConfirmModel> confirmWithDraw() async {

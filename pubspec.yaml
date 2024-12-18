@@ -33,12 +33,11 @@ dependencies:
   intl: 0.20.1
   flutter_screenutil: 5.9.3
   flutter_svg: 2.0.16
-  flutter_spinkit: 5.2.1
   chopper: 8.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  mockito: 5.4.4
   build_runner: 2.4.11
   chopper_generator: 8.0.3
 

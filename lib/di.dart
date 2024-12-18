@@ -10,7 +10,7 @@ import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/show_snack_
 import 'package:thrivve_assignment/core/utils/navigation_service.dart';
 import 'package:thrivve_assignment/core/utils/storage.dart';
 import 'package:thrivve_assignment/features/withdraw/data/data_soruces/i_withdraw_datasource.dart';
-import 'package:thrivve_assignment/features/withdraw/data/data_soruces/withdraw_datawsource.dart';
+import 'package:thrivve_assignment/features/withdraw/data/data_soruces/withdraw_datasource.dart';
 import 'package:thrivve_assignment/features/withdraw/data/services/withdraw_service.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/repositories/i_withdraw_repository.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/repositories/withdraw_repository.dart';
@@ -52,7 +52,7 @@ void _initWithDraw() {
   );
 
   getIt.registerLazySingleton<IWithdrawDataSource>(
-    () => WithdrawDatawSource(
+    () => WithdrawDataSource(
       getIt<WithdrawService>(),
     ),
   );
