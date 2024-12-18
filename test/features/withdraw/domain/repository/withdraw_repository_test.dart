@@ -15,8 +15,6 @@ import 'withdraw_repository_test.mocks.dart';
   IWithdrawDataSource,
 ])
 Future<void> main() async {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   late MockIWithdrawDataSource mockWithdrawDataSource;
   late WithdrawRepository repository;
 
