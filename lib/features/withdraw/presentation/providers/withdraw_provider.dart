@@ -6,31 +6,33 @@ import 'package:thrivve_assignment/core/helper/page_loading_dialog/page_loading_
 import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/i_show_snack_bar_helper.dart';
 import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/show_snack_bar_input.dart';
 import 'package:thrivve_assignment/core/utils/api_exception.dart';
+import 'package:thrivve_assignment/core/utils/navigation_service.dart';
 import 'package:thrivve_assignment/core/utils/shard.dart';
+import 'package:thrivve_assignment/features/sucess/presentation/views/arguments/success_page_arguments.dart';
+import 'package:thrivve_assignment/features/sucess/presentation/views/pages/success_page.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/entities/payment_entity.dart';
-import 'package:thrivve_assignment/features/withdraw/domain/use_cases/list_payment_use_case.dart';
+import 'package:thrivve_assignment/features/withdraw/domain/entities/withdraw_confirm_entity.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/use_cases/withdraw_confrim_use_case.dart';
+import 'package:thrivve_assignment/features/withdraw/presentation/providers/payment_provider.dart';
 
 class WithdrawProvider extends ChangeNotifier {
   final IGetWithDrawUseCase _getWithDrawUseCase;
-  final IGetPaymentListUseCase _getPaymentListUseCase;
   final IPageLoadingDialog iPageLoadingDialog;
   final IShowSnackBarHelper _showSnackBarHelper;
+  final PaymentProvider _paymentProvider;
 
   WithdrawProvider(
     this._showSnackBarHelper,
     this.iPageLoadingDialog,
     this._getWithDrawUseCase,
-    this._getPaymentListUseCase,
+    this._paymentProvider,
   );
 
   final inputWithDrawController = TextEditingController();
   int availableBalance = 9000;
   int indexSelectionSuggested = -1;
-  int indexSelectionPayment = -1;
-
+  PaymentEntity? paymentEntity;
   List<int> amounts = [];
-  List<PaymentEntity> paymentList = [];
   void setIndexSelectionSuggested(int index) {
     if (index != -1) {
       setAmount(amounts[index]);
@@ -48,8 +50,9 @@ class WithdrawProvider extends ChangeNotifier {
     if (checkInputUser().inverted) return;
     final loader = iPageLoadingDialog.showLoadingDialog();
     try {
-      await _getWithDrawUseCase.execute();
+      final result = await _getWithDrawUseCase.execute();
       loader.hide();
+      _goToSuccessPage(result);
     } catch (error) {
       loader.hide();
       final apiError = ApiErrorHandler.handle(error);
@@ -59,26 +62,13 @@ class WithdrawProvider extends ChangeNotifier {
     }
   }
 
-  void setSelectedPayment(index) {
-    indexSelectionPayment = index;
+  void openPaymentMethod() {
+    _paymentProvider.checkPaymentExists();
+  }
+
+  void setSelectedPayment(PaymentEntity payment) {
+    paymentEntity = payment;
     notifyListeners();
-  }
-
-  Future<void> getListPayment() async {
-    final loader = iPageLoadingDialog.showLoadingDialog();
-    try {
-      final result = await _getPaymentListUseCase.execute();
-      loader.hide();
-      paymentList = result;
-      notifyListeners();
-    } catch (error) {
-      loader.hide();
-      final apiError = ApiErrorHandler.handle(error);
-      _showSnackBarHelper
-          .showSnack(ShowSnackBarInput(message: apiError.getDisplayMessage()));
-
-      log('An unexpected error occurred: ${apiError.technicalDetails.toString()}');
-    }
   }
 
   Future<void> getSuggestedAmounts() async {
@@ -151,7 +141,7 @@ class WithdrawProvider extends ChangeNotifier {
             duration: Duration(milliseconds: 700),
             message: 'Please enter amount less than $availableBalance sar'),
       );
-    } else if (indexSelectionPayment == -1) {
+    } else if (paymentEntity == -1) {
       _showSnackBarHelper.showSnack(
         ShowSnackBarInput(
             duration: Duration(milliseconds: 700),
@@ -165,5 +155,16 @@ class WithdrawProvider extends ChangeNotifier {
   void onChangeInput(String value) {
     setIndexSelectionSuggested(-1);
     notifyListeners();
+  }
+
+  void _goToSuccessPage(WithdrawConfirmEntity result) {
+    final args = SuccessPageArguments(
+      result.title ?? '',
+      result.message ?? '',
+    );
+    NavigationService.instance.navigateToAndRemove(
+      SuccessPage.routeName,
+      args: args,
+    );
   }
 }

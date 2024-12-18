@@ -6,6 +6,7 @@ import 'package:thrivve_assignment/core/utils/navigation_service.dart';
 import 'package:thrivve_assignment/core/utils/router.dart';
 import 'package:thrivve_assignment/di.dart';
 import 'package:thrivve_assignment/features/splash/presentation/views/pages/splash_page.dart';
+import 'package:thrivve_assignment/features/withdraw/presentation/providers/payment_provider.dart';
 import 'package:thrivve_assignment/features/withdraw/presentation/providers/withdraw_provider.dart';
 
 import 'widgets/dismiss_keyboard.dart';
@@ -19,6 +20,7 @@ void main() async {
 _providers() {
   return [
     ChangeNotifierProvider(create: (_) => getIt<WithdrawProvider>()),
+    ChangeNotifierProvider(create: (_) => getIt<PaymentProvider>()),
   ];
 }
 

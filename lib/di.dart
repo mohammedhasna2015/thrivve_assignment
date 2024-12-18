@@ -16,6 +16,7 @@ import 'package:thrivve_assignment/features/withdraw/domain/repositories/i_withd
 import 'package:thrivve_assignment/features/withdraw/domain/repositories/withdraw_repository.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/use_cases/list_payment_use_case.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/use_cases/withdraw_confrim_use_case.dart';
+import 'package:thrivve_assignment/features/withdraw/presentation/providers/payment_provider.dart';
 import 'package:thrivve_assignment/features/withdraw/presentation/providers/withdraw_provider.dart';
 
 final getIt = GetIt.instance;
@@ -39,11 +40,10 @@ Future<void> init() async {
   getIt.registerLazySingleton<IShowSnackBarHelper>(
     () => ShowSnackBarHelperImpl(),
   );
-
-  _initWithDraw();
   getIt.registerSingleton<IShowBottomSheetHelper>(
     ShowBottomSheetHelperImpl(),
   );
+  _initWithDraw();
 }
 
 void _initWithDraw() {
@@ -72,13 +72,20 @@ void _initWithDraw() {
       getIt<IWithDrawRepository>(),
     ),
   );
-
+  getIt.registerSingleton(
+    PaymentProvider(
+      getIt<IGetPaymentListUseCase>(),
+      getIt<IPageLoadingDialog>(),
+      getIt<IShowSnackBarHelper>(),
+      getIt<IShowBottomSheetHelper>(),
+    ),
+  );
   getIt.registerSingleton(
     WithdrawProvider(
       getIt<IShowSnackBarHelper>(),
       getIt<IPageLoadingDialog>(),
       getIt<IGetWithDrawUseCase>(),
-      getIt<IGetPaymentListUseCase>(),
+      getIt<PaymentProvider>(),
     ),
   );
 }

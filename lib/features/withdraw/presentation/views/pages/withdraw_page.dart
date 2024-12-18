@@ -5,10 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:thrivve_assignment/core/themes/colors.dart';
 import 'package:thrivve_assignment/core/themes/images.dart';
 import 'package:thrivve_assignment/di.dart';
+import 'package:thrivve_assignment/features/withdraw/domain/entities/payment_entity.dart';
 import 'package:thrivve_assignment/features/withdraw/presentation/providers/withdraw_provider.dart';
 import 'package:thrivve_assignment/features/withdraw/presentation/views/widgets/suggested_amounts_widget.dart';
 import 'package:thrivve_assignment/widgets/custom_button_widget.dart';
 import 'package:thrivve_assignment/widgets/custom_text_widget.dart';
+import 'package:thrivve_assignment/widgets/image_loading.dart';
 
 class WithdrawPage extends StatefulWidget {
   static const routeName = '/WithdrawPage';
@@ -25,7 +27,6 @@ class _WithdrawPageState extends State<WithdrawPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getIt<WithdrawProvider>().getSuggestedAmounts();
-      getIt<WithdrawProvider>().getListPayment();
     });
   }
 
@@ -77,10 +78,12 @@ class _WithdrawPageState extends State<WithdrawPage> {
             SizedBox(height: 20),
             _suggestedAmounts(),
             SizedBox(height: 20),
-            _paymentSelection(provider),
+            _paymentMethod(provider),
             SizedBox(height: 10),
             Spacer(),
             _noteBank(),
+            SizedBox(height: 10),
+            _divider(),
             SizedBox(height: 10),
             _continueButton(provider),
           ],
@@ -185,7 +188,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
     getIt<WithdrawProvider>().withdrawRequest();
   }
 
-  Widget _paymentSelection(WithdrawProvider provider) {
+  Widget _paymentMethod(WithdrawProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -195,68 +198,19 @@ class _WithdrawPageState extends State<WithdrawPage> {
           title: 'Payment Method',
         ),
         SizedBox(height: 10.sp),
-        Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            border: Border.all(color: ThemeColors.color7A7A7A.withOpacity(0.2)),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Visibility(
-            visible: provider.indexSelectionPayment != -1,
-            child: Row(
-              children: [
-                Icon(Icons.account_balance, color: Colors.blue),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Al Rajhi Bank",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(
-                      "SA720011100000000085954356",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ],
+        GestureDetector(
+          onTap: provider.openPaymentMethod,
+          child: Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border:
+                  Border.all(color: ThemeColors.color7A7A7A.withOpacity(0.2)),
+              borderRadius: BorderRadius.circular(10),
             ),
-            replacement: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 40.w,
-                  height: 40.w,
-                  child: CircleAvatar(
-                    backgroundColor: ThemeColors.colorC8C9CC.withOpacity(0.3),
-                    child: Icon(
-                      Icons.add_circle_outline_outlined,
-                      color: ThemeColors.black,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 8.sp,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(
-                      title: 'Payment method selection',
-                      color: ThemeColors.black,
-                      fontWeight: FontWeight.bold,
-                      size: 15.sp,
-                    ),
-                    SizedBox(height: 5.sp),
-                    CustomTextWidget(
-                      title: 'Select your payment from sheet',
-                      color: ThemeColors.black,
-                      size: 12.sp,
-                    )
-                  ],
-                )
-              ],
+            child: Visibility(
+              visible: provider.paymentEntity != null,
+              child: _paymentSelection(provider.paymentEntity),
+              replacement: _addPayment(),
             ),
           ),
         ),
@@ -277,6 +231,84 @@ class _WithdrawPageState extends State<WithdrawPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _paymentSelection(PaymentEntity? paymentEntity) {
+    return Row(
+      children: [
+        ImageLoading(
+          imageUrl: paymentEntity?.bankImage ?? '',
+          width: 40.sp,
+          height: 40.sp,
+          borderRadius: 50.sp,
+        ),
+        SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomTextWidget(
+              title: paymentEntity?.bankName ?? '',
+              fontWeight: FontWeight.bold,
+              size: 15.sp,
+              color: ThemeColors.black,
+            ),
+            SizedBox(height: 5.sp),
+            CustomTextWidget(
+              title: paymentEntity?.beneficiaryIban ?? '',
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _addPayment() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 40.w,
+          height: 40.w,
+          child: CircleAvatar(
+            backgroundColor: ThemeColors.colorC8C9CC.withOpacity(0.3),
+            child: Icon(
+              Icons.add_circle_outline_outlined,
+              color: ThemeColors.black,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 8.sp,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomTextWidget(
+              title: 'Payment method selection',
+              color: ThemeColors.black,
+              fontWeight: FontWeight.bold,
+              size: 15.sp,
+            ),
+            SizedBox(height: 5.sp),
+            CustomTextWidget(
+              title: 'Select your payment from sheet',
+              color: ThemeColors.black,
+              size: 12.sp,
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _divider() {
+    return Divider(
+      height: 0.2,
+      color: ThemeColors.colorC8C9CC,
     );
   }
 }
