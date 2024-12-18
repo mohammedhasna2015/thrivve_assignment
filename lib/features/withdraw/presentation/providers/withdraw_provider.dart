@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:thrivve_assignment/core/base/error_handler.dart';
 import 'package:thrivve_assignment/core/helper/optional_mapper.dart';
 import 'package:thrivve_assignment/core/helper/page_loading_dialog/page_loading_dialog.dart';
 import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/i_show_snack_bar_helper.dart';
 import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/show_snack_bar_input.dart';
-import 'package:thrivve_assignment/core/utils/api_exception.dart';
 import 'package:thrivve_assignment/core/utils/navigation_service.dart';
 import 'package:thrivve_assignment/core/utils/shard.dart';
 import 'package:thrivve_assignment/features/sucess/presentation/views/arguments/success_page_arguments.dart';
@@ -55,10 +55,9 @@ class WithdrawProvider extends ChangeNotifier {
       _goToSuccessPage(result);
     } catch (error) {
       loader.hide();
-      final apiError = ApiErrorHandler.handle(error);
-      _showSnackBarHelper
-          .showSnack(ShowSnackBarInput(message: apiError.getDisplayMessage()));
-      log('An unexpected error occurred: ${apiError.technicalDetails.toString()}');
+      final message = ErrorHandler.handleError(error);
+      _showSnackBarHelper.showSnack(ShowSnackBarInput(message: message));
+      log('$message');
     }
   }
 

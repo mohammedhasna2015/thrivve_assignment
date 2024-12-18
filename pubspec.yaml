@@ -55,6 +55,8 @@ flutter:
 
   uses-material-design: true
   assets:
+    - assets/mockData/
+    - assets/mockData/withdraw/
     - assets/images/
     - assets/images/withdraw/
 

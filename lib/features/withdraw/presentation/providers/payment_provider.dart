@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:thrivve_assignment/core/base/error_handler.dart';
 import 'package:thrivve_assignment/core/helper/page_loading_dialog/page_loading_dialog.dart';
 import 'package:thrivve_assignment/core/helper/show_bottom_sheet/i_show_bottom_sheet.dart';
 import 'package:thrivve_assignment/core/helper/show_bottom_sheet/show_bottom_sheet_input.dart';
 import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/i_show_snack_bar_helper.dart';
 import 'package:thrivve_assignment/core/helper/show_snack_bar_helper/show_snack_bar_input.dart';
-import 'package:thrivve_assignment/core/utils/api_exception.dart';
 import 'package:thrivve_assignment/di.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/entities/payment_entity.dart';
 import 'package:thrivve_assignment/features/withdraw/domain/use_cases/list_payment_use_case.dart';
@@ -38,11 +38,9 @@ class PaymentProvider extends ChangeNotifier {
       notifyListeners();
     } catch (error) {
       loader.hide();
-      final apiError = ApiErrorHandler.handle(error);
-      _showSnackBarHelper
-          .showSnack(ShowSnackBarInput(message: apiError.getDisplayMessage()));
-
-      log('An unexpected error occurred: ${apiError.technicalDetails.toString()}');
+      final message = ErrorHandler.handleError(error);
+      _showSnackBarHelper.showSnack(ShowSnackBarInput(message: message));
+      log('$message');
     }
   }
 
