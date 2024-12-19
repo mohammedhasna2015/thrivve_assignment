@@ -165,9 +165,11 @@ class _WithdrawPageState extends State<WithdrawPage> {
   }
 
   Widget _suggestedAmounts() {
-    return SizedBox(
-      height: 45.sp,
-      child: SuggestedAmountsWidget(),
+    return Center(
+      child: SizedBox(
+        height: 45.sp,
+        child: SuggestedAmountsWidget(),
+      ),
     );
   }
 

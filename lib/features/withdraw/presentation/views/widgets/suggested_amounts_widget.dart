@@ -12,6 +12,7 @@ class SuggestedAmountsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WithdrawProvider>(builder: (context, provider, child) {
       return ListView.separated(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemBuilder: (_, index) => _itemSuggested(_, index, provider),
         separatorBuilder: separatorBuilder,
@@ -35,7 +36,7 @@ class SuggestedAmountsWidget extends StatelessWidget {
                 horizontal: 8.sp, vertical: 12.sp),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.sp),
-              color: ThemeColors.color515151.withOpacity(0.3),
+              color: ThemeColors.color515151.withOpacity(0.1),
               border: isSelected
                   ? Border.all(color: ThemeColors.colorB211af)
                   : null,

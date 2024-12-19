@@ -29,7 +29,7 @@ class WithdrawProvider extends ChangeNotifier {
   );
 
   final inputWithDrawController = TextEditingController();
-  int availableBalance = 9000;
+  int availableBalance = 400;
   int indexSelectionSuggested = -1;
   PaymentEntity? paymentEntity;
   bool isLoadingConfirm = false;
