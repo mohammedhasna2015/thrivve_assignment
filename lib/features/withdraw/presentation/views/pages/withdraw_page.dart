@@ -68,24 +68,37 @@ class _WithdrawPageState extends State<WithdrawPage> {
       padding: const EdgeInsets.all(16.0),
       child: Consumer<WithdrawProvider>(builder: (context, provider, child) {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _titleHeader(),
-            SizedBox(height: 20),
-            _inputAmounts(provider),
-            SizedBox(height: 10),
-            _titleMaxAmount(provider),
-            SizedBox(height: 20),
-            _suggestedAmounts(),
-            SizedBox(height: 20),
-            _paymentMethod(provider),
-            SizedBox(height: 10),
-            Spacer(),
-            _noteBank(),
-            SizedBox(height: 10),
-            _divider(),
-            SizedBox(height: 10),
-            _continueButton(provider),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _titleHeader(),
+                    SizedBox(height: 20),
+                    _inputAmounts(provider),
+                    SizedBox(height: 10),
+                    _titleMaxAmount(provider),
+                    SizedBox(height: 20),
+                    _suggestedAmounts(),
+                    SizedBox(height: 20),
+                    _paymentMethod(provider),
+                    SizedBox(height: 10),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                SizedBox(height: 10),
+                _noteBank(),
+                SizedBox(height: 10),
+                _divider(),
+                SizedBox(height: 10),
+                _continueButton(provider),
+                SizedBox(height: 10),
+              ],
+            )
           ],
         );
       }),
