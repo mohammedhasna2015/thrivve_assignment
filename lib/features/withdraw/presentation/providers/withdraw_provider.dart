@@ -32,6 +32,7 @@ class WithdrawProvider extends ChangeNotifier {
   int availableBalance = 9000;
   int indexSelectionSuggested = -1;
   PaymentEntity? paymentEntity;
+  bool isLoadingConfirm = false;
   List<int> amounts = [];
   void setIndexSelectionSuggested(int index) {
     if (index != -1) {
@@ -48,14 +49,18 @@ class WithdrawProvider extends ChangeNotifier {
 
   Future<void> withdrawRequest() async {
     if (checkInputUser().inverted) return;
+
     final loader = iPageLoadingDialog.showLoadingDialog();
     try {
+      isLoadingConfirm = false;
       final result = await _getWithDrawUseCase.execute();
+      isLoadingConfirm = true;
       loader.hide();
       _goToSuccessPage(result);
     } catch (error) {
+      isLoadingConfirm = false;
       loader.hide();
-      final message = ErrorHandler.handleError(error);
+      final message = ErrorHandler().handleError(error);
       _showSnackBarHelper.showSnack(ShowSnackBarInput(message: message));
       log('$message');
     }
@@ -92,25 +97,18 @@ class WithdrawProvider extends ChangeNotifier {
       return [];
     }
 
-    // The minimum suggested value is 50
     int minSuggestion = 50;
-
-    // The maximum suggested value is the current balance
     int maxSuggestion = currentBalance;
 
-    // Ensure the max suggestion is a multiple of 50
     maxSuggestion = (maxSuggestion ~/ 50) * 50;
 
-    // Calculate two additional suggested values between min and max
     List<int> suggestions = [minSuggestion];
 
-    // First additional suggestion: approximately 1/3 of the way between min and max
     int firstAdditional =
         minSuggestion + ((maxSuggestion - minSuggestion) ~/ 3);
     firstAdditional = (firstAdditional ~/ 50) * 50;
     suggestions.add(firstAdditional);
 
-    // Second additional suggestion: approximately 2/3 of the way between min and max
     int secondAdditional =
         minSuggestion + (2 * (maxSuggestion - minSuggestion) ~/ 3);
     secondAdditional = (secondAdditional ~/ 50) * 50;
@@ -140,7 +138,7 @@ class WithdrawProvider extends ChangeNotifier {
             duration: Duration(milliseconds: 700),
             message: 'Please enter amount less than $availableBalance sar'),
       );
-    } else if (paymentEntity == -1) {
+    } else if (paymentEntity == null) {
       _showSnackBarHelper.showSnack(
         ShowSnackBarInput(
             duration: Duration(milliseconds: 700),

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:thrivve_assignment/core/base/error_handler.dart';
 import 'package:thrivve_assignment/core/helper/page_loading_dialog/page_loading_dialog.dart';
 import 'package:thrivve_assignment/core/helper/show_bottom_sheet/i_show_bottom_sheet.dart';
@@ -34,22 +33,20 @@ class PaymentProvider extends ChangeNotifier {
       final result = await _getPaymentListUseCase.execute();
       loader.hide();
       paymentList = result;
-      openPaymentSheet();
       notifyListeners();
     } catch (error) {
       loader.hide();
-      final message = ErrorHandler.handleError(error);
+      final message = ErrorHandler().handleError(error);
       _showSnackBarHelper.showSnack(ShowSnackBarInput(message: message));
       log('$message');
     }
   }
 
-  void checkPaymentExists() {
+  Future<void> checkPaymentExists() async {
     if (paymentList.isEmpty) {
-      getListPayment();
-    } else {
-      openPaymentSheet();
+      await getListPayment();
     }
+    openPaymentSheet();
   }
 
   Future<void> openPaymentSheet() async {
@@ -58,8 +55,8 @@ class PaymentProvider extends ChangeNotifier {
       ShowBottomSheetInput(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.sp),
-            topRight: Radius.circular(12.sp),
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
           ),
         ),
         PaymentMethodSheetWidget(

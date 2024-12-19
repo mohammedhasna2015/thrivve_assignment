@@ -2,7 +2,7 @@ import 'package:thrivve_assignment/core/base/exceptions.dart';
 
 class ErrorHandler {
   /// Maps exceptions to user-friendly error messages.
-  static String handleError(dynamic exception) {
+  String handleError(dynamic exception) {
     if (exception is NetworkException) {
       return 'No internet connection. Please check your network and try again.';
     } else if (exception is ServerException) {
